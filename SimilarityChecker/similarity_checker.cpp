@@ -1,10 +1,15 @@
 ﻿#include "similarity_checker.h"
 
+#include <stdexcept>
+
 static constexpr int LENGTH_SCORE_MAX = 60;
 
 SimilarityChecker::SimilarityChecker(const std::string& targetStr) : targetStr(targetStr) {}
 
 int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) const {
+    for (char c : targetStr) if (c < 'A' || c > 'Z') throw std::invalid_argument("String should be uppercase");
+    for (char c : checkStr) if (c < 'A' || c > 'Z') throw std::invalid_argument("String should be uppercase");
+
     int targetStrSize = targetStr.size();
     int checkStrSize = checkStr.size();
 

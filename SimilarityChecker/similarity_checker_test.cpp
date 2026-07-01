@@ -9,9 +9,10 @@ using namespace testing;
 struct SimilarityCheckerParam {
     std::string target;
     std::string check;
-    int expected;
+    int expected = 0;
 };
 struct SimilarityCheckerTester : public TestWithParam<SimilarityCheckerParam> {};
+
 struct SimilarityCheckerLengthTester : public SimilarityCheckerTester {};
 
 TEST_P(SimilarityCheckerLengthTester, LengthScoreTest) {
@@ -62,3 +63,33 @@ INSTANTIATE_TEST_SUITE_P(
     )
 );
 
+struct SimilarityCheckerLengthInvalidArgumentTester : public SimilarityCheckerTester {};
+
+TEST_P(SimilarityCheckerLengthInvalidArgumentTester, LengthScoreInvalidArgumentTest) {
+    auto&& p = GetParam();
+    SimilarityChecker checker(p.target);
+    EXPECT_THROW(checker.getLengthSimilarityScore(p.check), std::invalid_argument);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    SimilarityCheckerLengthInvalidArgumentTest,
+    SimilarityCheckerLengthInvalidArgumentTester,
+    Values(
+        SimilarityCheckerParam{
+            .target = "adbfelk",
+            .check = "AEFJLSI",
+        },
+        SimilarityCheckerParam{
+            .target = "AFELKFJSE",
+            .check = "faliejflase",
+        },
+        SimilarityCheckerParam{
+            .target = "232n432",
+            .check = "ADKLFJEK",
+        },
+        SimilarityCheckerParam{
+            .target = "ASLFAJES",
+            .check = "flskfjlakse",
+        }
+    )
+);
