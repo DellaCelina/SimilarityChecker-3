@@ -35,10 +35,7 @@ ExistAlphabet makeExistAlphabet(const std::string& str) {
     return exists;
 }
 
-int SimilarityChecker::getAlphabetSimilarityScore(const std::string& checkStr) const {
-    checkStrValid(targetStr);
-    checkStrValid(checkStr);
-
+static int calculateAlphabetScore(const std::string& targetStr, const std::string& checkStr) {
     static constexpr int ALPHABET_SCORE_MAX = 40;
 
     auto targetAlphabetExist = makeExistAlphabet(targetStr);
@@ -48,6 +45,12 @@ int SimilarityChecker::getAlphabetSimilarityScore(const std::string& checkStr) c
     size_t totalCount = (targetAlphabetExist | checkAlphabetExist).count();
 
     return ALPHABET_SCORE_MAX * sameCount / totalCount;
+}
+
+int SimilarityChecker::getAlphabetSimilarityScore(const std::string& checkStr) const {
+    checkStrValid(targetStr);
+    checkStrValid(checkStr);
+    return calculateAlphabetScore(targetStr, checkStr);
 }
 
 int SimilarityChecker::getScore(const std::string& checkStr) const {
