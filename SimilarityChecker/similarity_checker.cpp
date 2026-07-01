@@ -8,8 +8,10 @@ int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) con
     int targetStrSize = targetStr.size();
     int checkStrSize = checkStr.size();
 
-    int sizeGap = std::abs(targetStrSize - checkStrSize);
     int shortSize = std::min(targetStrSize, checkStrSize);
+
+    int sizeGap = std::abs(targetStrSize - checkStrSize);
+    sizeGap = std::min(sizeGap, shortSize);
 
     return LENGTH_SCORE_MAX - LENGTH_SCORE_MAX * sizeGap / shortSize;
 }
