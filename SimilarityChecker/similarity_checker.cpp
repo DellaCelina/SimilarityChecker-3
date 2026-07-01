@@ -2,8 +2,6 @@
 
 #include <stdexcept>
 
-static constexpr int LENGTH_SCORE_MAX = 60;
-
 SimilarityChecker::SimilarityChecker(const std::string& targetStr) : targetStr(targetStr) {}
 
 static void checkStrValid(const std::string& str) {
@@ -11,12 +9,8 @@ static void checkStrValid(const std::string& str) {
     if (str.size() == 0) throw std::invalid_argument("String can't be empty");
 }
 
-int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) const {
-    checkStrValid(targetStr);
-    checkStrValid(checkStr);
-
-    int targetStrSize = targetStr.size();
-    int checkStrSize = checkStr.size();
+static int calculateLengthScore(int targetStrSize, int checkStrSize) {
+    static constexpr int LENGTH_SCORE_MAX = 60;
 
     int shortSize = std::min(targetStrSize, checkStrSize);
 
@@ -24,6 +18,12 @@ int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) con
     sizeGap = std::min(sizeGap, shortSize);
 
     return LENGTH_SCORE_MAX - LENGTH_SCORE_MAX * sizeGap / shortSize;
+}
+
+int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) const {
+    checkStrValid(targetStr);
+    checkStrValid(checkStr);
+    return calculateLengthScore(targetStr.size(), checkStr.size());
 }
 
 int SimilarityChecker::getAlphabetSimilarityScore(const std::string& checkStr) const {
