@@ -54,5 +54,5 @@ int SimilarityChecker::getAlphabetSimilarityScore(const std::string& checkStr) c
 }
 
 int SimilarityChecker::getScore(const std::string& checkStr) const {
-    return 0;
+    return getLengthSimilarityScore(checkStr) + getAlphabetSimilarityScore(checkStr);
 }

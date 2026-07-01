@@ -181,3 +181,91 @@ INSTANTIATE_TEST_SUITE_P(
     )
 );
 
+struct SimilarityCheckerTotalScoreTester : public SimilarityCheckerTester {};
+
+TEST_P(SimilarityCheckerTotalScoreTester, TotalScoreTest) {
+    auto&& p = GetParam();
+    SimilarityChecker checker(p.target);
+    EXPECT_EQ(checker.getScore(p.check), p.expected);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    SimilarityCheckerTotalScoreTest,
+    SimilarityCheckerTotalScoreTester,
+    Values(
+        SimilarityCheckerParam{
+            .target = "ASD",
+            .check = "DSA",
+            .expected = 60 + 40,
+        },
+        SimilarityCheckerParam{
+            .target = "A",
+            .check = "BB",
+            .expected = 0 + 0,
+        },
+        SimilarityCheckerParam{
+            .target = "AAABB",
+            .check = "BAA",
+            .expected = 20 + 40,
+        },
+        SimilarityCheckerParam{
+            .target = "AA",
+            .check = "AAE",
+            .expected = 30 + 20,
+        },
+        SimilarityCheckerParam{
+            .target = "AAAAAAAAAAA",
+            .check = "AAAAAAAAA",
+            .expected = 47 + 40,
+        },
+        SimilarityCheckerParam{
+            .target = "ABCDFE",
+            .check = "A",
+            .expected = 0 + 6,
+        },
+        SimilarityCheckerParam{
+            .target = "A",
+            .check = "ABCDFE",
+            .expected = 0 + 6,
+        }
+    )
+);
+
+struct SimilarityCheckerTotalInvalidArgumentTester : public SimilarityCheckerTester {};
+
+TEST_P(SimilarityCheckerTotalInvalidArgumentTester, AlphabetScoreInvalidArgumentTest) {
+    auto&& p = GetParam();
+    SimilarityChecker checker(p.target);
+    EXPECT_THROW(checker.getScore(p.check), std::invalid_argument);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    SimilarityCheckerTotalInvalidArgumentTest,
+    SimilarityCheckerTotalInvalidArgumentTester,
+    Values(
+        SimilarityCheckerParam{
+            .target = "",
+            .check = "AEFJLSI",
+        },
+        SimilarityCheckerParam{
+            .target = "FAWEFAE",
+            .check = "",
+        },
+        SimilarityCheckerParam{
+            .target = "adbfelk",
+            .check = "AEFJLSI",
+        },
+        SimilarityCheckerParam{
+            .target = "AFELKFJSE",
+            .check = "faliejflase",
+        },
+        SimilarityCheckerParam{
+            .target = "232n432",
+            .check = "ADKLFJEK",
+        },
+        SimilarityCheckerParam{
+            .target = "ASLFAJES",
+            .check = "flskfjlakse",
+        }
+    )
+);
