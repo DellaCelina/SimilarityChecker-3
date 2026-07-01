@@ -142,3 +142,42 @@ INSTANTIATE_TEST_SUITE_P(
     )
 );
 
+struct SimilarityCheckerAlphabetInvalidArgumentTester : public SimilarityCheckerTester {};
+
+TEST_P(SimilarityCheckerAlphabetInvalidArgumentTester, AlphabetScoreInvalidArgumentTest) {
+    auto&& p = GetParam();
+    SimilarityChecker checker(p.target);
+    EXPECT_THROW(checker.getAlphabetSimilarityScore(p.check), std::invalid_argument);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    SimilarityCheckerAlphabetInvalidArgumentTest,
+    SimilarityCheckerAlphabetInvalidArgumentTester,
+    Values(
+        SimilarityCheckerParam{
+            .target = "",
+            .check = "AEFJLSI",
+        },
+        SimilarityCheckerParam{
+            .target = "FAWEFAE",
+            .check = "",
+        },
+        SimilarityCheckerParam{
+            .target = "adbfelk",
+            .check = "AEFJLSI",
+        },
+        SimilarityCheckerParam{
+            .target = "AFELKFJSE",
+            .check = "faliejflase",
+        },
+        SimilarityCheckerParam{
+            .target = "232n432",
+            .check = "ADKLFJEK",
+        },
+        SimilarityCheckerParam{
+            .target = "ASLFAJES",
+            .check = "flskfjlakse",
+        }
+    )
+);
+

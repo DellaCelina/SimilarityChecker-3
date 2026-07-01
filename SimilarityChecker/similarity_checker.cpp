@@ -36,6 +36,9 @@ ExistAlphabet makeExistAlphabet(const std::string& str) {
 }
 
 int SimilarityChecker::getAlphabetSimilarityScore(const std::string& checkStr) const {
+    checkStrValid(targetStr);
+    checkStrValid(checkStr);
+
     static constexpr int ALPHABET_SCORE_MAX = 40;
 
     auto targetAlphabetExist = makeExistAlphabet(targetStr);
