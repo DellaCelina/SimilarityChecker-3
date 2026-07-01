@@ -43,6 +43,11 @@ INSTANTIATE_TEST_SUITE_P(
             .target = "AA",
             .check = "AAE",
             .expected = 30,
+        },
+        SimilarityCheckerParam{
+            .target = "AAAAAAAAAAA",
+            .check = "AAAAAAAAA",
+            .expected = 47
         }
     )
 );
