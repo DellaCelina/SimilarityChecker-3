@@ -1,6 +1,7 @@
 ﻿#include "similarity_checker.h"
 
 #include <stdexcept>
+#include <bitset>
 
 SimilarityChecker::SimilarityChecker(const std::string& targetStr) : targetStr(targetStr) {}
 
@@ -27,7 +28,16 @@ int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) con
 }
 
 int SimilarityChecker::getAlphabetSimilarityScore(const std::string& checkStr) const {
-    return 0;
+    std::bitset<26> targetAlphabetExist;
+    std::bitset<26> checkAlphabetExist;
+
+    for (char c : targetStr) targetAlphabetExist[c - 'A'] = true;
+    for (char c : checkStr) checkAlphabetExist[c - 'A'] = true;
+
+    std::bitset<26> totalAlphabetExist = targetAlphabetExist | checkAlphabetExist;
+    std::bitset<26> sameAlphabetExist = targetAlphabetExist & checkAlphabetExist;
+
+    return 40 * sameAlphabetExist.count() / totalAlphabetExist.count();
 }
 
 int SimilarityChecker::getScore(const std::string& checkStr) const {

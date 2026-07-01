@@ -101,3 +101,39 @@ INSTANTIATE_TEST_SUITE_P(
         }
     )
 );
+
+struct SimilarityCheckerAlphabetTester : public SimilarityCheckerTester {};
+
+TEST_P(SimilarityCheckerAlphabetTester, AlphabetTest) {
+    auto&& p = GetParam();
+    SimilarityChecker checker(p.target);
+    EXPECT_EQ(checker.getAlphabetSimilarityScore(p.check), p.expected);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    SimilarityCheckerAlphabetTest,
+    SimilarityCheckerAlphabetTester,
+    Values(
+        SimilarityCheckerParam{
+            .target = "ASD",
+            .check = "DSA",
+            .expected = 40,
+        },
+        SimilarityCheckerParam{
+            .target = "A",
+            .check = "BB",
+            .expected = 0,
+        },
+        SimilarityCheckerParam{
+            .target = "AAABBAAAA",
+            .check = "BA",
+            .expected = 40,
+        },
+        SimilarityCheckerParam{
+            .target = "AA",
+            .check = "AAE",
+            .expected = 20,
+        }
+    )
+);
+
