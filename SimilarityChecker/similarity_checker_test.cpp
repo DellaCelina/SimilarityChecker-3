@@ -2,12 +2,48 @@
 
 #include "gmock/gmock.h"
 
+#include "similarity_checker.h"
+
 using namespace testing;
 
 struct SimilarityCheckerParam {
     std::string target;
     std::string check;
-    int score;
+    int expected;
 };
-struct SimilarityCheckerTester : public TestWithParam<SimilarityCheckerParam> {
-};
+struct SimilarityCheckerTester : public TestWithParam<SimilarityCheckerParam> {};
+struct SimilarityCheckerLengthTester : public SimilarityCheckerTester {};
+
+TEST_P(SimilarityCheckerLengthTester, LengthScoreTest) {
+    auto&& p = GetParam();
+    SimilarityChecker checker(p.target);
+    EXPECT_EQ(checker.getLengthSimilarityScore(p.check), p.expected);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    SimilarityCheckerLengthTest,
+    SimilarityCheckerLengthTester,
+    Values(
+        SimilarityCheckerParam{
+            .target = "ASD",
+            .check = "DSA",
+            .expected = 60,
+        },
+        SimilarityCheckerParam{
+            .target = "A",
+            .check = "BB",
+            .expected = 0,
+        },
+        SimilarityCheckerParam{
+            .target = "AAABB",
+            .check = "BAA",
+            .expected = 20,
+        },
+        SimilarityCheckerParam{
+            .target = "AA",
+            .check = "AAE",
+            .expected = 30,
+        }
+    )
+);
+
