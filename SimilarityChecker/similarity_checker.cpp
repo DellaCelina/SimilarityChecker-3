@@ -13,9 +13,9 @@ static int calculateLengthScore(int targetStrSize, int checkStrSize) {
     static constexpr int LENGTH_SCORE_MAX = 60;
 
     int shortSize = std::min(targetStrSize, checkStrSize);
-
-    int sizeGap = std::abs(targetStrSize - checkStrSize);
-    sizeGap = std::min(sizeGap, shortSize);
+    int sizeGap = std::min(
+        std::abs(targetStrSize - checkStrSize),
+        shortSize);
 
     return LENGTH_SCORE_MAX - LENGTH_SCORE_MAX * sizeGap / shortSize;
 }
