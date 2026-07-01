@@ -6,15 +6,17 @@ static constexpr int LENGTH_SCORE_MAX = 60;
 
 SimilarityChecker::SimilarityChecker(const std::string& targetStr) : targetStr(targetStr) {}
 
+static void checkStrValid(const std::string& str) {
+    for (char c : str) if (c < 'A' || c > 'Z') throw std::invalid_argument("String should be uppercase");
+    if (str.size() == 0) throw std::invalid_argument("String can't be empty");
+}
+
 int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) const {
-    for (char c : targetStr) if (c < 'A' || c > 'Z') throw std::invalid_argument("String should be uppercase");
-    for (char c : checkStr) if (c < 'A' || c > 'Z') throw std::invalid_argument("String should be uppercase");
+    checkStrValid(targetStr);
+    checkStrValid(checkStr);
 
     int targetStrSize = targetStr.size();
-    if (targetStrSize == 0) throw std::invalid_argument("String can't be empty");
-
     int checkStrSize = checkStr.size();
-    if (checkStrSize == 0) throw std::invalid_argument("String can't be empty");
 
     int shortSize = std::min(targetStrSize, checkStrSize);
 
