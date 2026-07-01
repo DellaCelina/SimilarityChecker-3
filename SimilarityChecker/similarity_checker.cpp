@@ -27,17 +27,24 @@ int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) con
     return calculateLengthScore(targetStr.size(), checkStr.size());
 }
 
+constexpr size_t ALPHABET_COUNT = 'Z' - 'A' + 1;
+using ExistAlphabet = std::bitset<ALPHABET_COUNT>;
+ExistAlphabet makeExistAlphabet(const std::string& str) {
+    ExistAlphabet exists;
+    for (char c : str) exists[c - 'A'] = true;
+    return exists;
+}
+
 int SimilarityChecker::getAlphabetSimilarityScore(const std::string& checkStr) const {
-    std::bitset<26> targetAlphabetExist;
-    std::bitset<26> checkAlphabetExist;
+    static constexpr int ALPHABET_SCORE_MAX = 40;
 
-    for (char c : targetStr) targetAlphabetExist[c - 'A'] = true;
-    for (char c : checkStr) checkAlphabetExist[c - 'A'] = true;
+    auto targetAlphabetExist = makeExistAlphabet(targetStr);
+    auto checkAlphabetExist = makeExistAlphabet(checkStr);
 
-    std::bitset<26> totalAlphabetExist = targetAlphabetExist | checkAlphabetExist;
-    std::bitset<26> sameAlphabetExist = targetAlphabetExist & checkAlphabetExist;
+    size_t sameCount = (targetAlphabetExist & checkAlphabetExist).count();
+    size_t totalCount = (targetAlphabetExist | checkAlphabetExist).count();
 
-    return 40 * sameAlphabetExist.count() / totalAlphabetExist.count();
+    return ALPHABET_SCORE_MAX * sameCount / totalCount;
 }
 
 int SimilarityChecker::getScore(const std::string& checkStr) const {
