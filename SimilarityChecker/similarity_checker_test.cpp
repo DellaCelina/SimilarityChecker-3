@@ -133,6 +133,11 @@ INSTANTIATE_TEST_SUITE_P(
             .target = "AA",
             .check = "AAE",
             .expected = 20,
+        },
+        SimilarityCheckerParam{
+            .target = "ABCDEFGHIJKLMN",
+            .check = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            .expected = 40 * 14 / 26,
         }
     )
 );
