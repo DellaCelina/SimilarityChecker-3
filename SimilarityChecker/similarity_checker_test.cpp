@@ -76,6 +76,14 @@ INSTANTIATE_TEST_SUITE_P(
     SimilarityCheckerLengthInvalidArgumentTester,
     Values(
         SimilarityCheckerParam{
+            .target = "",
+            .check = "AEFJLSI",
+        },
+        SimilarityCheckerParam{
+            .target = "FAWEFAE",
+            .check = "",
+        },
+        SimilarityCheckerParam{
             .target = "adbfelk",
             .check = "AEFJLSI",
         },

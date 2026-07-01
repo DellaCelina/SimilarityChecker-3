@@ -11,7 +11,10 @@ int SimilarityChecker::getLengthSimilarityScore(const std::string& checkStr) con
     for (char c : checkStr) if (c < 'A' || c > 'Z') throw std::invalid_argument("String should be uppercase");
 
     int targetStrSize = targetStr.size();
+    if (targetStrSize == 0) throw std::invalid_argument("String can't be empty");
+
     int checkStrSize = checkStr.size();
+    if (checkStrSize == 0) throw std::invalid_argument("String can't be empty");
 
     int shortSize = std::min(targetStrSize, checkStrSize);
 
